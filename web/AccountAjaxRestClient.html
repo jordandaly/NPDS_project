@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script language="javascript" type="text/javascript">
+            var request = null;
+
+            function createRequest() {
+                            try {
+                            request = new XMLHttpRequest();
+                            } catch (trymicrosoft) {
+                            try {
+                            request = new ActiveXObject("MsXML2.XMLHTTP");
+                            } catch (othermicrosoft) {
+                            try {
+                            request = new ActiveXObject("Microsoft.XMLHTTP");
+                            } catch (failed) {
+                            request = null;
+                            }
+                            }
+                            }
+
+                            if (request == null)
+                            alert("Error creating request object!");
+            }
+            
+            function getMessage()
+                            {
+                            createRequest();
+                            var accountid = document.getElementById("accountid").value;
+                            id=eval(accountid);
+                            var url = "http://localhost:8080/AccountServer/webresources/com.accountentity.account/"+id;
+                            request.onreadystatechange = handleResponse;
+                            request.open("GET", url, true);
+                            request.send(null);
+                            }
+                            
+        function handleResponse() {
+                                    if (request.readyState==4 && request.status==200)
+                                    { 
+                                    var xmlDocument=request.responseXML;
+                                    var phnums = xmlDocument.getElementsByTagName("phoneNumber");
+                                    var bals = xmlDocument.getElementsByTagName("balance");
+                                    
+
+                                    for(var i=0; i<phnums.length; i++) {
+                                    var phnum = phnums[i].childNodes[0].nodeValue;
+                                    var bal = bals[i].childNodes[0].nodeValue;
+                                    
+                                    document.getElementById('phoneNumber').value=phnum;
+                                    document.getElementById('balance').value=bal;
+                                    
+                                    }
+                                    }
+
+}
+</script>
+    </head>
+    <body>
+        <table>
+            <tr>
+            <td>Enter Account ID : </td>
+            <td><input type="text" id="accountid" size="10"/>
+
+            <input type="button" value="Get Balance" onclick="getMessage()"/>
+            </tr>
+            <tr>
+            <td>Account Phone number  : </td>
+            <td> <input type="text" id="phoneNumber" size="10"/> </td>
+            </tr>
+
+            <tr>
+            <td>Account Balance : </td>
+            <td> <input type="text" id="balance" size="10"/> </td>
+            </tr>
+
+
+        </table>
+    </body>
+</html>
