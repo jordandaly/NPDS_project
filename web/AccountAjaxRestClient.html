@@ -42,15 +42,30 @@ and open the template in the editor.
                             request.send(null);
                             }
                             
+            function putMessage()
+                            {
+                            createRequest();
+                            var accountid = document.getElementById("accountid").value;
+                            id=eval(accountid);
+                            var url = "http://localhost:8080/AccountServer/webresources/com.accountentity.account/"+id;
+                            //request.onreadystatechange = handleTopUp;
+                            var put = "<account><balance>50.0</balance><id>2</id><phoneNumber>899635536</phoneNumber></account>";
+                            //var put = "<account><balance>"+balance+"</balance><id>"+id+"</id><phoneNumber>"+phonenumber+"</phoneNumber></account>";
+                            request.open("PUT", url, true);
+                            request.send(handleTopUp());
+                            }
+                            
         function handleResponse() {
                                     if (request.readyState==4 && request.status==200)
                                     { 
                                     var xmlDocument=request.responseXML;
+                                    
                                     var phnums = xmlDocument.getElementsByTagName("phoneNumber");
                                     var bals = xmlDocument.getElementsByTagName("balance");
                                     
 
                                     for(var i=0; i<phnums.length; i++) {
+                                    
                                     var phnum = phnums[i].childNodes[0].nodeValue;
                                     var bal = bals[i].childNodes[0].nodeValue;
                                     
@@ -59,8 +74,41 @@ and open the template in the editor.
                                     
                                     }
                                     }
+                            }
+                                    
+            function handleTopUp() {
+                                    if (request.readyState==4 && request.status==200)
+                                    { 
+                                    var xmlDocument=request.responseXML;
+                                    var id = xmlDocument.getElementsByTagName("id");
+                                    var phnums = xmlDocument.getElementsByTagName("phoneNumber");
+                                    var bals = xmlDocument.getElementsByTagName("balance")[0].childNodes[0];
+                                    var topupamt = document.getElementById("topup").value;
+                                    bals.nodeValue= topupamt;
 
-}
+                                    for(var i=0; i<phnums.length; i++) {
+                                    var idval = id[i].childNodes[0].nodeValue;
+                                    var phnum = phnums[i].childNodes[0].nodeValue;
+                                    //var bal = bals[i].childNodes[0].nodeValue;
+                                    //bal = topupamt;
+                
+                                    
+                                    
+                                    
+                                    document.getElementById('phoneNumber').value=phnum;
+                                    document.getElementById('balance').value=topupamt;
+                                    
+                                    
+                                    
+                                    }
+                                    console.log(xmlDocument);
+                                    return xmlDocument;
+                                    putMessage();
+                                    
+                                  
+                                    }
+
+                            }
 </script>
     </head>
     <body>
@@ -79,6 +127,13 @@ and open the template in the editor.
             <tr>
             <td>Account Balance : </td>
             <td> <input type="text" id="balance" size="10"/> </td>
+            </tr>
+            
+            <tr>
+            <td>Required Balance : </td>
+            <td><input type="text" id="topup" size="10"/>
+
+            <input type="button" value="Top up" onclick="handleTopUp()"/></td>
             </tr>
 
 

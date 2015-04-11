@@ -46,6 +46,15 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     public void edit(@PathParam("id") Integer id, Account entity) {
         super.edit(entity);
     }
+    
+    /*
+    @PUT
+    @Path("{balance}")
+    @Consumes({"application/xml", "application/json"})
+    public void edit(@PathParam("balance") Integer balance) {
+        super.edit(balance);
+    }
+    */
 
     @DELETE
     @Path("{id}")
