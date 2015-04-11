@@ -109,6 +109,40 @@ and open the template in the editor.
                                     }
 
                             }
+                            
+                function transfer() {
+                                    if (request.readyState==4 && request.status==200)
+                                    { 
+                                    var xmlDocument=request.responseXML;
+                                    var id = xmlDocument.getElementsByTagName("id");
+                                    var phnums = xmlDocument.getElementsByTagName("phoneNumber");
+                                    var bals = xmlDocument.getElementsByTagName("balance")[0].childNodes[0];
+                                    var amt = document.getElementById("transferAmt").value;
+                                    bals.nodeValue -=amt;
+
+                                    for(var i=0; i<phnums.length; i++) {
+                                    var idval = id[i].childNodes[0].nodeValue;
+                                    var phnum = phnums[i].childNodes[0].nodeValue;
+                                    //var bal = bals[i].childNodes[0].nodeValue;
+                                    //bal = topupamt;
+                
+                                    
+                                    
+                                    
+                                    document.getElementById('phoneNumber').value=phnum;
+                                    document.getElementById('balance').value=bals.nodeValue;
+                                    
+                                    
+                                    
+                                    }
+                                    console.log(xmlDocument);
+                                    return xmlDocument;
+                                    putMessage();
+                                    
+                                  
+                                    }
+
+                            }
 </script>
     </head>
     <body>
@@ -134,6 +168,16 @@ and open the template in the editor.
             <td><input type="text" id="topup" size="10"/>
 
             <input type="button" value="Top up" onclick="handleTopUp()"/></td>
+            </tr>
+            
+            <tr>
+            <td>Transfer credit to : </td>
+            <td><input type="text" id="transfer" size="10"/>
+                
+            <td>Amount : </td>
+            <td><input type="text" id="transferAmt" size="10"/>
+
+            <input type="button" value="Transfer" onclick="transfer()"/></td>
             </tr>
 
 
